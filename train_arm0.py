@@ -168,7 +168,7 @@ def train():
         "gae_lambda": 0.95,        # GAE参数
         "max_grad_norm": 0.5,      # 梯度裁剪
         "vf_coef": 0.5,           # 值函数损失系数
-        "device": "cuda" if torch.cuda.is_available() else "cpu",
+        "device": "cpu",           # 使用CPU训练MLP策略更稳定
         "verbose": 1
     }
 
