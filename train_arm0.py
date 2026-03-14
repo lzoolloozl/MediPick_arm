@@ -45,7 +45,7 @@ class VideoRecorderCallback(BaseCallback):
     """
     自定义视频录制回调 - 每个eval_freq录制一次评估视频
     """
-    def __init__(self, eval_env, video_dir, eval_freq=10000, video_length=500, verbose=0):
+    def __init__(self, eval_env, video_dir, eval_freq=2000, video_length=500, verbose=0):
         super().__init__(verbose)
         self.eval_env = eval_env
         self.video_dir = video_dir
@@ -123,9 +123,11 @@ def train():
     # ==================== 1. 路径与环境配置 ====================
     model_dir = "models/medipick_arm0"
     log_dir = "logs/tensorboard/arm0"
+    video_dir = "videos"
     
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
+    os.makedirs(video_dir, exist_ok=True)
 
     print("=" * 50)
     print("MediPick Arm0 PPO 训练")
@@ -185,32 +187,29 @@ def train():
     )
 
     # ==================== 5. 设置回调函数 ====================
-    # 视频录制目录
-    video_dir = "videos"
-    
-    # 检查点回调: 每50000步保存一次模型
+    # 检查点回调: 每10000步保存一次模型
     checkpoint_callback = CheckpointCallback(
-        save_freq=50000,
+        save_freq=10000,
         save_path=model_dir,
         name_prefix="arm0_step"
     )
 
-    # 评估回调: 每10000步评估一次并保存最佳模型
+    # 评估回调: 每2000步评估一次并保存最佳模型
     eval_callback = EvalCallback(
         env, 
         best_model_save_path=f"{model_dir}/best_model",
         log_path=f"{model_dir}/eval_results", 
-        eval_freq=10000,
+        eval_freq=2000,
         deterministic=True, 
         render=False,
         n_eval_episodes=10
     )
 
-    # 视频录制回调: 每10000步录制一次评估视频
+    # 视频录制回调: 每2000步录制一次评估视频
     video_callback = VideoRecorderCallback(
         eval_env=env,
         video_dir=video_dir,
-        eval_freq=10000,
+        eval_freq=2000,
         video_length=500,
         verbose=1
     )
@@ -226,8 +225,10 @@ def train():
     
     print(f"\n开始训练! 总步数: {total_timesteps}")
     print(f"日志目录: {log_dir}")
+    print(f"视频目录: {video_dir}")
     print("提示: 运行 'tensorboard --logdir logs/tensorboard/arm0' 查看实时数据")
     print("提示: 可以在tensorboard中查看 'rollout/ep_rew_mean' 曲线评估奖励")
+    print("提示: 视频每2000步录制一次，保存在 videos/ 目录")
     print("-" * 50)
     
     try:
