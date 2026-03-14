@@ -1,0 +1,84 @@
+raise_joint (prismatic)
+
+lower: -0.8
+upper: 0
+effort: 0
+velocity: 0
+rjight_joint_1 (revolute)
+
+lower: -3.75
+upper: 0.58
+effort: 0
+velocity: 0
+rjight_joint_2 (revolute)
+
+lower: -1.98
+upper: 1.96
+effort: 0
+velocity: 0
+right_joint_3 (revolute)
+
+lower: -2.46
+upper: 3.26
+effort: 0
+velocity: 0
+right_joint_4 (revolute)
+
+lower: -2.43
+upper: 1.68
+effort: 0
+velocity: 0
+right_joint_5 (revolute)
+
+lower: -3.06
+upper: 2.01
+effort: 0
+velocity: 0
+right_joint_6 (revolute)
+
+lower: -1.88
+upper: 1.92
+effort: 0
+velocity: 0
+left_joint_1 (revolute)
+
+lower: -2.094
+upper: 2.094
+effort: 0
+velocity: 0
+left_joint_2 (revolute)
+
+lower: -2.094
+upper: 2.094
+effort: 0
+velocity: 0
+left_joint_3 (revolute)
+
+lower: -2.094
+upper: 2.094
+effort: 0
+velocity: 0
+left_joint_4 (revolute)
+
+lower: -2.094
+upper: 2.094
+effort: 0
+velocity: 0
+left_joint_5 (revolute)
+
+lower: -2.094
+upper: 2.094
+effort: 0
+velocity: 0
+head_joint_1 (revolute)
+
+lower: -2.618
+upper: 2.618
+effort: 0
+velocity: 0
+head_joint_2 (revolute)
+
+lower: -0.52
+upper: 0.52
+effort: 0
+velocity: 0

@@ -1,0 +1,188 @@
+<mujoco model="MediPick_Simple3">
+  <compiler angle="radian" meshdir="../meshes/" inertiafromgeom="true"/>
+
+  <option gravity="0 0 0" cone="elliptic" impratio="10" timestep="0.001">
+    <flag contact="enable"/> 
+  </option>
+
+  <asset>
+    <material name="link_white" rgba="1 1 1 1" specular="0.5" shininess="0.5"/>
+    <material name="motor_grey" rgba="0.2 0.2 0.2 1" specular="0.1" shininess="0.1"/>
+    <material name="joint_blue" rgba="0.2 0.5 0.8 1"/>
+    
+    <mesh name="base_link" file="base_link.STL"/><mesh name="raise_link" file="raise_link.STL"/>
+    <mesh name="r1_link" file="r1_link.STL"/><mesh name="r2_link" file="r2_link.STL"/>
+    <mesh name="r3_link" file="r3_link.STL"/><mesh name="r4_link" file="r4_link.STL"/>
+    <mesh name="r5_link" file="r5_link.STL"/><mesh name="r6_link" file="r6_link.STL"/>
+    <mesh name="sucker" file="sucker.STL"/>
+    <mesh name="r2_motor" file="r2_motor.STL"/><mesh name="r3_motor" file="r3_motor.STL"/>
+    <mesh name="r4_motor" file="r4_motor.STL"/><mesh name="r5_motor" file="r5_motor.STL"/>
+    <mesh name="r6_motor" file="r6_motor.STL"/>
+    <mesh name="h1_link" file="h1_link.STL"/><mesh name="h2_link" file="h2_link.STL"/><mesh name="h2_motor" file="h2_motor.STL"/>
+    <mesh name="l1_link" file="l1_link.STL"/><mesh name="l2_link" file="l2_link.STL"/><mesh name="l3_link" file="l3_link.STL"/>
+    <mesh name="l4_link" file="l4_link.STL"/><mesh name="l5_link" file="l5_link.STL"/>
+    <mesh name="l2_motor" file="l2_motor.STL"/><mesh name="l3_motor" file="l3_motor.STL"/>
+    <mesh name="l4_motor" file="l4_motor.STL"/><mesh name="l5_motor" file="l5_motor.STL"/>
+  </asset>
+
+  <default>
+    <default class="simple3_base">
+      <joint frictionloss="0.1" armature="1.0" damping="200" limited="true"/>
+      <default class="Arm_R1"><joint range="-0.6 4"/><position kp="20000" forcerange="-500 500" ctrlrange="-0.6 4"/></default>
+      <default class="Arm_R2"><joint range="-1.98 1.96"/><position kp="20000" forcerange="-500 500" ctrlrange="-1.98 1.96"/></default>
+      <default class="Arm_R3"><joint range="-1.6 2.4"/><position kp="20000" forcerange="-500 500" ctrlrange="-1.6 2.4"/></default>
+      <default class="Arm_R4"><joint range="-2.1 2.4"/><position kp="20000" forcerange="-500 500" ctrlrange="-2.1 2.4"/></default>
+      <default class="Arm_R5"><joint range="-3.06 2.01"/><position kp="20000" forcerange="-500 500" ctrlrange="-3.06 2.01"/></default>
+      <default class="Arm_R6"><joint range="-1.88 1.92"/><position kp="20000" forcerange="-500 500" ctrlrange="-1.88 1.92"/></default>
+      <default class="Arm_H1"><joint range="-2.618 2.618"/><position kp="20000" forcerange="-500 500" ctrlrange="-2.618 2.618"/></default>
+      <default class="Arm_H2"><joint range="-0.52 0.52"/><position kp="20000" forcerange="-500 500" ctrlrange="-0.52 0.52"/></default>
+      <default class="Arm_L1"><joint range="-2.094 2.094"/><position kp="20000" forcerange="-500 500" ctrlrange="-2.094 2.094"/></default>
+      <default class="Arm_L2"><joint range="-2.094 2.094"/><position kp="20000" forcerange="-500 500" ctrlrange="-2.094 2.094"/></default>
+      <default class="Arm_L3"><joint range="-2.094 2.094"/><position kp="20000" forcerange="-500 500" ctrlrange="-2.094 2.094"/></default>
+      <default class="Arm_L4"><joint range="-2.094 2.094"/><position kp="20000" forcerange="-500 500" ctrlrange="-2.094 2.094"/></default>
+      <default class="Arm_L5"><joint range="-2.094 2.094"/><position kp="20000" forcerange="-500 500" ctrlrange="-2.094 2.094"/></default>
+      
+      <default class="Linear_Joint">
+        <joint type="slide" range="-0.8 0" damping="500" armature="10"/>
+        <position kp="2000" forcerange="-5000 5000" ctrlrange="-0.8 0"/>
+      </default>
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="1" material="link_white"/>
+      </default>
+      <default class="collision">
+        <geom group="0" type="mesh" density="1000" contype="1" conaffinity="1"/>
+      </default>
+    </default>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 3" dir="0 0 -1" diffuse="0.8 0.8 0.8"/>
+    
+    <body name="base" childclass="simple3_base">
+      <geom mesh="base_link" class="visual"/><geom mesh="base_link" class="collision"/>
+
+      <body name="raise_link" pos="0 0 0.791">
+        <joint name="raise_joint" class="Linear_Joint" axis="0 0 1"/>
+        <geom mesh="raise_link" class="visual"/><geom mesh="raise_link" class="collision"/>
+
+        <body name="r1_link" pos="0.073 0 0.08">
+          <joint name="r1_joint" class="Arm_R1" axis="1 0 0"/>
+          <geom mesh="r1_link" class="visual" material="joint_blue"/><geom mesh="r1_link" class="collision"/>
+          
+          <geom mesh="r2_motor" pos="0.066 0.047 0" class="visual" material="motor_grey"/><geom mesh="r2_motor" pos="0.066 0.047 0" class="collision"/>
+          <body name="r2_link" pos="0.066 0.047 0">
+            <joint name="r2_joint" class="Arm_R2" axis="0 1 0"/>
+            <geom mesh="r2_link" class="visual"/><geom mesh="r2_link" class="collision"/>
+            
+            <geom mesh="r3_motor" pos="0.1641 -0.047 0" class="visual" material="motor_grey"/><geom mesh="r3_motor" pos="0.1641 -0.047 0" class="collision"/>
+            <body name="r3_link" pos="0.1641 -0.047 0">
+              <joint name="r3_joint" class="Arm_R3" axis="1 0 0"/>
+              <geom mesh="r3_link" class="visual"/><geom mesh="r3_link" class="collision"/>
+              
+              <geom mesh="r4_motor" pos="0.1859 0.04769 0" class="visual" material="motor_grey"/><geom mesh="r4_motor" pos="0.1859 0.04769 0" class="collision"/>
+              <body name="r4_link" pos="0.1859 0.04769 0">
+                <joint name="r4_joint" class="Arm_R4" axis="0 1 0"/>
+                <geom mesh="r4_link" class="visual"/><geom mesh="r4_link" class="collision"/>
+                
+                <geom mesh="r5_motor" pos="0.23605 -0.04856 0" class="visual" material="motor_grey"/><geom mesh="r5_motor" pos="0.23605 -0.04856 0" class="collision"/>
+                <body name="r5_link" pos="0.23605 -0.04856 0">
+                  <joint name="r5_joint" class="Arm_R5" axis="1 0 0"/>
+                  <geom mesh="r5_link" class="visual"/><geom mesh="r5_link" class="collision"/>
+                  
+                  <geom mesh="r6_motor" pos="0.063 -0.02288 0" class="visual" material="motor_grey"/><geom mesh="r6_motor" pos="0.063 -0.02288 0" class="collision"/>
+                  <body name="r6_link" pos="0.063 -0.02288 0">
+                    <joint name="r6_joint" class="Arm_R6" axis="0 -1 0"/>
+                    <geom mesh="r6_link" class="visual" material="joint_blue"/><geom mesh="r6_link" class="collision"/>
+
+               
+                  <body name="sucker" pos="0.116349 0.02375 0">
+                    <inertial pos="-0.0210176 0 0" quat="0.5 0.5 0.5 0.5" mass="0.0915259" diaginertia="2.3e-05 2.3e-05 5e-06"/>
+                    <joint name="sucker_joint" pos="0 0 0" axis="1 0 0" range="-3.1416 3.1416"/>
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.615686 0.643137 0.67451 1" mesh="sucker"/>
+                    <geom type="mesh" rgba="0.615686 0.643137 0.67451 1" mesh="sucker"/>
+                    <site name="sucker_tip" pos="0 0 0" size="0.01" type="sphere" rgba="1 0 0 1"/>
+                  </body>
+
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+
+        <body name="h1_link" pos="0.0025 0 0.2129">
+          <joint name="h1_joint" class="Arm_H1" axis="0 0 -1"/>
+          <geom mesh="h1_link" class="visual"/><geom mesh="h1_link" class="collision"/>
+          
+          <geom mesh="h2_motor" pos="-0.0039 0 0.037" class="visual" material="motor_grey"/><geom mesh="h2_motor" pos="-0.0039 0 0.037" class="collision"/>
+          <body name="h2_link" pos="-0.0039 0 0.037">
+            <joint name="h2_joint" class="Arm_H2" axis="1 0 0"/>
+            <geom mesh="h2_link" class="visual"/><geom mesh="h2_link" class="collision"/>
+          </body>
+        </body>
+
+        <body name="l1_link" pos="-0.112 0 0.08">
+          <joint name="l1_joint" class="Arm_L1" axis="-1 0 0"/>
+          <geom mesh="l1_link" class="visual"/><geom mesh="l1_link" class="collision"/>
+          
+          <geom mesh="l2_motor" pos="-0.0505 0.03575 -0.02" class="visual" material="motor_grey"/><geom mesh="l2_motor" pos="-0.0505 0.03575 -0.02" class="collision"/>
+          <body name="l2_link" pos="-0.0505 0.03575 -0.02">
+            <joint name="l2_joint" class="Arm_L2" axis="0 1 0"/>
+            <geom mesh="l2_link" class="visual"/><geom mesh="l2_link" class="collision"/>
+            
+            <geom mesh="l3_motor" pos="-0.1475 -0.03575 0.02" class="visual" material="motor_grey"/><geom mesh="l3_motor" pos="-0.1475 -0.03575 0.02" class="collision"/>
+            <body name="l3_link" pos="-0.1475 -0.03575 0.02">
+              <joint name="l3_joint" class="Arm_L3" axis="-1 0 0"/>
+              <geom mesh="l3_link" class="visual"/><geom mesh="l3_link" class="collision"/>
+              
+              <geom mesh="l4_motor" pos="-0.2025 0 0.0322" class="visual" material="motor_grey"/><geom mesh="l4_motor" pos="-0.2025 0 0.0322" class="collision"/>
+              <body name="l4_link" pos="-0.2025 0 0.0322">
+                <joint name="l4_joint" class="Arm_L4" axis="0 0 1"/>
+                <geom mesh="l4_link" class="visual"/><geom mesh="l4_link" class="collision"/>
+                
+                <geom mesh="l5_motor" pos="-0.22575 0 -0.03215" class="visual" material="motor_grey"/><geom mesh="l5_motor" pos="-0.22575 0 -0.03215" class="collision"/>
+                <body name="l5_link" pos="-0.22575 0 -0.03215">
+                  <joint name="l5_joint" class="Arm_L5" axis="-1 0 0"/>
+                  <geom mesh="l5_link" class="visual"/><geom mesh="l5_link" class="collision"/>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body >
+    </body>
+  </worldbody>
+
+  <contact>
+    <exclude body1="raise_link" body2="r1_link"/>
+    <exclude body1="r1_link" body2="r2_link"/>
+    <exclude body1="r2_link" body2="r3_link"/>
+    <exclude body1="r3_link" body2="r4_link"/>
+    <exclude body1="r4_link" body2="r5_link"/>
+    <exclude body1="r5_link" body2="r6_link"/>
+    <exclude body1="raise_link" body2="h1_link"/>
+    <exclude body1="h1_link" body2="h2_link"/>
+    <exclude body1="raise_link" body2="l1_link"/>
+    <exclude body1="l1_link" body2="l2_link"/>
+    <exclude body1="l2_link" body2="l3_link"/>
+    <exclude body1="l3_link" body2="l4_link"/>
+    <exclude body1="l4_link" body2="l5_link"/>
+  </contact>
+
+  <actuator>
+    <position name="act_raise" joint="raise_joint" class="Linear_Joint"/>
+    <position name="act_r1" joint="r1_joint" class="Arm_R1"/>
+    <position name="act_r2" joint="r2_joint" class="Arm_R2"/>
+    <position name="act_r3" joint="r3_joint" class="Arm_R3"/>
+    <position name="act_r4" joint="r4_joint" class="Arm_R4"/>
+    <position name="act_r5" joint="r5_joint" class="Arm_R5"/>
+    <position name="act_r6" joint="r6_joint" class="Arm_R6"/>
+    <position name="act_h1" joint="h1_joint" class="Arm_H1"/>
+    <position name="act_h2" joint="h2_joint" class="Arm_H2"/>
+    <position name="act_l1" joint="l1_joint" class="Arm_L1"/>
+    <position name="act_l2" joint="l2_joint" class="Arm_L2"/>
+    <position name="act_l3" joint="l3_joint" class="Arm_L3"/>
+    <position name="act_l4" joint="l4_joint" class="Arm_L4"/>
+    <position name="act_l5" joint="l5_joint" class="Arm_L5"/>
+  </actuator>
+</mujoco>

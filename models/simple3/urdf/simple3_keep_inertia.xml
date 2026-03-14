@@ -1,0 +1,149 @@
+<mujoco model="simple3">
+  <compiler inertiafromgeom="true" angle="radian" meshdir="../meshes/"/>
+  <asset>
+    <mesh name="base_link" content_type="model/stl" file="base_link.STL"/>
+    <mesh name="raise_link" content_type="model/stl" file="raise_link.STL"/>
+    <mesh name="r1_link" content_type="model/stl" file="r1_link.STL"/>
+    <mesh name="r2_link" content_type="model/stl" file="r2_link.STL"/>
+    <mesh name="r3_link" content_type="model/stl" file="r3_link.STL"/>
+    <mesh name="r4_link" content_type="model/stl" file="r4_link.STL"/>
+    <mesh name="r5_link" content_type="model/stl" file="r5_link.STL"/>
+    <mesh name="r6_link" content_type="model/stl" file="r6_link.STL"/>
+    <mesh name="sucker" content_type="model/stl" file="sucker.STL"/>
+    <mesh name="r6_motor" content_type="model/stl" file="r6_motor.STL"/>
+    <mesh name="r5_motor" content_type="model/stl" file="r5_motor.STL"/>
+    <mesh name="r4_motor" content_type="model/stl" file="r4_motor.STL"/>
+    <mesh name="r3_motor" content_type="model/stl" file="r3_motor.STL"/>
+    <mesh name="r2_motor" content_type="model/stl" file="r2_motor.STL"/>
+    <mesh name="h1_link" content_type="model/stl" file="h1_link.STL"/>
+    <mesh name="h2_link" content_type="model/stl" file="h2_link.STL"/>
+    <mesh name="h2_motor" content_type="model/stl" file="h2_motor.STL"/>
+    <mesh name="l1_link" content_type="model/stl" file="l1_link.STL"/>
+    <mesh name="l2_link" content_type="model/stl" file="l2_link.STL"/>
+    <mesh name="l3_link" content_type="model/stl" file="l3_link.STL"/>
+    <mesh name="l4_link" content_type="model/stl" file="l4_link.STL"/>
+    <mesh name="l5_link" content_type="model/stl" file="l5_link.STL"/>
+    <mesh name="l6_motor" content_type="model/stl" file="l6_motor.STL"/>
+    <mesh name="l5_motor" content_type="model/stl" file="l5_motor.STL"/>
+    <mesh name="l4_motor" content_type="model/stl" file="l4_motor.STL"/>
+    <mesh name="l3_motor" content_type="model/stl" file="l3_motor.STL"/>
+    <mesh name="l2_motor" content_type="model/stl" file="l2_motor.STL"/>
+  </asset>
+
+  <worldbody>
+    <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="base_link"/>
+    <geom type="mesh" rgba="1 1 1 1" mesh="base_link"/>
+    <body name="raise_link" pos="0 0 0.791">
+      <inertial pos="-0.0219186 -0.00614991 0.0804767" quat="0.49865 0.42787 0.479376 0.581785" mass="2.11084" />
+      <joint name="raise_joint" pos="0 0 0" axis="0 0 1" type="slide"/>
+      <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="raise_link"/>
+      <geom type="mesh" rgba="1 1 1 1" mesh="raise_link"/>
+      <body name="r1_link" pos="0.073 0 0.08">
+        <inertial pos="-0.03939 0.0225577 -1.9252e-06" quat="0.50306 0.503171 0.496929 0.496801" mass="0.878384" diaginertia="0.00152036 0.00128324 0.000621883"/>
+        <joint name="r1_joint" pos="0 0 0" axis="1 0 0"/>
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792157 0.819608 0.933333 1" mesh="r1_link"/>
+        <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="r1_link"/>
+        <geom pos="0.066 0.047 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="r2_motor"/>
+        <geom pos="0.066 0.047 0" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="r2_motor"/>
+        <body name="r2_link" pos="0.066 0.047 0">
+          <inertial pos="0.118575 -0.0417652 1.33858e-05" quat="0.644134 0.645352 0.290205 0.290503" mass="0.811881" diaginertia="0.00127392 0.00119378 0.000734862"/>
+          <joint name="r2_joint" pos="0 0 0" axis="0 1 0"/>
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.898039 0.917647 0.929412 1" mesh="r2_link"/>
+          <geom type="mesh" rgba="0.898039 0.917647 0.929412 1" mesh="r2_link"/>
+          <geom pos="0.1641 -0.047 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="r3_motor"/>
+          <geom pos="0.1641 -0.047 0" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="r3_motor"/>
+          <body name="r3_link" pos="0.1641 -0.047 0">
+            <inertial pos="0.15575 -0.0401991 0.0349295" quat="0.544432 0.472799 0.357341 0.593601" mass="0.512001" diaginertia="0.00231531 0.00226892 0.000360983"/>
+            <joint name="r3_joint" pos="0 0 0" axis="1 0 0"/>
+            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="r3_link"/>
+            <geom type="mesh" rgba="1 1 1 1" mesh="r3_link"/>
+            <geom pos="0.1859 0.0476904 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="r4_motor"/>
+            <geom pos="0.1859 0.0476904 0" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="r4_motor"/>
+            <body name="r4_link" pos="0.1859 0.0476904 0">
+              <inertial pos="0.182404 -0.0425667 -7.43431e-12" quat="0.128053 0.695415 -0.128053 0.695415" mass="0.388375" diaginertia="0.000833879 0.000819335 0.000165544"/>
+              <joint name="r4_joint" pos="0 0 0" axis="0 1 0"/>
+              <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="r4_link"/>
+              <geom type="mesh" rgba="1 1 1 1" mesh="r4_link"/>
+              <geom pos="0.23605 -0.0485581 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="r5_motor"/>
+              <geom pos="0.23605 -0.0485581 0" type="mesh" rgba="1 1 1 1" mesh="r5_motor"/>
+              <body name="r5_link" pos="0.23605 -0.0485581 0">
+                <inertial pos="0.0607852 0.0247704 -0.0213717" quat="0.730072 0.287773 -0.502983 0.362201" mass="0.401506" diaginertia="0.000289546 0.000271332 0.000184333"/>
+                <joint name="r5_joint" pos="0 0 0" axis="1 0 0"/>
+                <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="r5_link"/>
+                <geom type="mesh" rgba="1 1 1 1" mesh="r5_link"/>
+                <geom pos="0.063 -0.0228823 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="r6_motor"/>
+                <geom pos="0.063 -0.0228823 0" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="r6_motor"/>
+                <body name="r6_link" pos="0.063 -0.0228823 0">
+                  <inertial pos="0.0254221 -0.00365786 1.63936e-12" quat="0.468021 0.468021 0.530053 0.530053" mass="0.0572743" diaginertia="8.41231e-05 8.3e-05 1.08769e-05"/>
+                  <joint name="r6_joint" pos="0 0 0" axis="0 -1 0"/>
+                  <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.898039 0.917647 0.929412 1" mesh="r6_link"/>
+                  <geom type="mesh" rgba="0.898039 0.917647 0.929412 1" mesh="r6_link"/>
+                  <body name="sucker" pos="0.116349 0.02375 0">
+                    <inertial pos="-0.0210176 0 0" quat="0.5 0.5 0.5 0.5" mass="0.0915259" diaginertia="2.3e-05 2.3e-05 5e-06"/>
+                    <joint name="sucker_joint" pos="0 0 0" axis="1 0 0"/>
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.615686 0.643137 0.67451 1" mesh="sucker"/>
+                    <geom type="mesh" rgba="0.615686 0.643137 0.67451 1" mesh="sucker"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="h1_link" pos="0.0025 0 0.2129">
+        <inertial pos="0.013725 0 0.0337437" quat="0.990528 0 0.137314 0" mass="0.076423" diaginertia="2.97507e-05 2.83237e-05 2.1573e-05"/>
+        <joint name="h1_link" pos="0 0 0" axis="0 0 -1"/>
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="h1_link"/>
+        <geom type="mesh" rgba="1 1 1 1" mesh="h1_link"/>
+        <geom pos="-0.0039 0 0.037" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="h2_motor"/>
+        <geom pos="-0.0039 0 0.037" type="mesh" rgba="1 1 1 1" mesh="h2_motor"/>
+        <body name="h2_link" pos="-0.0039 0 0.037">
+          <inertial pos="-0.0015 0.0558888 -0.002" quat="0 0.707107 0 0.707107" mass="0.0702083" diaginertia="5.8e-05 4.3e-05 2e-05"/>
+          <joint name="h2_joint" pos="0 0 0" axis="1 0 0"/>
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="h2_link"/>
+          <geom type="mesh" rgba="1 1 1 1" mesh="h2_link"/>
+        </body>
+      </body>
+      <body name="l1_link" pos="-0.112 0 0.08">
+        <inertial pos="-0.0481541 -0.0116013 0.0203079" quat="0.97276 0.223524 -0.0214832 -0.0575643" mass="0.392127" diaginertia="0.000850049 0.000787504 0.000499899"/>
+        <joint name="l1_joint" pos="0 0 0" axis="-1 0 0"/>
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l1_link"/>
+        <geom type="mesh" rgba="1 1 1 1" mesh="l1_link"/>
+        <geom pos="-0.0505 0.03575 -0.02" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l2_motor"/>
+        <geom pos="-0.0505 0.03575 -0.02" type="mesh" rgba="1 1 1 1" mesh="l2_motor"/>
+        <body name="l2_link" pos="-0.0505 0.03575 -0.02">
+          <inertial pos="0.0126499 -0.0890439 0.00523625" quat="0.348304 0.646159 -0.244836 0.633417" mass="0.169241" diaginertia="0.00149317 0.00146411 0.000165152"/>
+          <joint name="l2_joint" pos="0 0 0" axis="0 1 0"/>
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l2_link"/>
+          <geom type="mesh" rgba="1 1 1 1" mesh="l2_link"/>
+          <geom pos="-0.1475 -0.03575 0.02" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l3_motor"/>
+          <geom pos="-0.1475 -0.03575 0.02" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="l3_motor"/>
+          <body name="l3_link" pos="-0.1475 -0.03575 0.02">
+            <inertial pos="0.0139382 -0.144476 -0.0204139" quat="0.273285 0.688554 -0.383743 0.551317" mass="0.139316" diaginertia="0.00190571 0.00180726 0.000149925"/>
+            <joint name="l3_joint" pos="0 0 0" axis="-1 0 0"/>
+            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l3_link"/>
+            <geom type="mesh" rgba="1 1 1 1" mesh="l3_link"/>
+            <geom pos="-0.2025 0 0.0322" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l4_motor"/>
+            <geom pos="-0.2025 0 0.0322" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="l4_motor"/>
+            <body name="l4_link" pos="-0.2025 0 0.0322">
+              <inertial pos="-0.0866033 -0.0530085 -0.0351319" quat="0.260368 0.641217 -0.314345 0.649797" mass="0.198611" diaginertia="0.00231979 0.00196332 0.000438413"/>
+              <joint name="l4_joint" pos="0 0 0" axis="0 0 1"/>
+              <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.898039 0.917647 0.929412 1" mesh="l4_link"/>
+              <geom type="mesh" rgba="0.898039 0.917647 0.929412 1" mesh="l4_link"/>
+              <geom pos="-0.22575 0 -0.03215" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l5_motor"/>
+              <geom pos="-0.22575 0 -0.03215" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="l5_motor"/>
+              <body name="l5_link" pos="-0.22575 0 -0.03215">
+                <inertial pos="-0.0497511 -2.83727e-11 -0.00112048" quat="0.408536 0.577147 0.577147 0.408536" mass="0.114971" diaginertia="8.85482e-05 7.0845e-05 3.57032e-05"/>
+                <joint name="l5_joint" pos="0 0 0" axis="-1 0 0"/>
+                <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l5_link"/>
+                <geom type="mesh" rgba="1 1 1 1" mesh="l5_link"/>
+                <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="l6_motor"/>
+                <geom type="mesh" rgba="1 1 1 1" mesh="l6_motor"/>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

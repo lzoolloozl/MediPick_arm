@@ -1,0 +1,1548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="simple3">
+  <mujoco>
+    <compiler meshdir="../meshes/" balanceinertia="true" discardvisual="false" />
+  </mujoco>
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="2.18595298593523E-12 -0.012953655491812 0.278350823811405"
+        rpy="0 0 0" />
+      <mass
+        value=" 23.498820" />
+
+      <inertia
+        ixx="0.831951000000001"
+        ixy="0.000000000000000"
+        ixz="0.000000000000000"
+        iyy="0.759981000000001"
+        iyz="0.0776980000000001"
+        izz="0.305116000000001" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="raise_link">
+    <inertial>
+      <origin
+        xyz="-0.0219186048216149 -0.00614991149762911 0.0804766509374972"
+        rpy="0 0 0" />
+      <mass
+        value="2.110838" />
+        	Lxx = 0.006699	Lxy = -0.000572	Lxz = -0.000359
+	Lyx = -0.000572	Lyy = 0.010821	Lyz = -0.000003
+	Lzx = -0.000359	Lzy = -0.000003	Lzz = 0.008571
+      <inertia
+        ixx="0.00669900000000001"
+        ixy="-0.000572000000000001"
+        ixz="-0.000359000000000001"
+        iyy="0.0108210000000001"
+        iyz="-0.0000030000000001"
+        izz="0.0085710000000001" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/raise_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/raise_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="raise_joint"
+    type="prismatic">
+    <origin
+      xyz="0 0 0.791000000000037"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="raise_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="r1_link">
+    <inertial>
+      <origin
+        xyz="0.0536938677883263 0.0187830858768375 -2.5473955109212E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.0663841986630166" />
+
+      <inertia
+        ixx="0.00005000000000001"
+        ixy="-0.00001400000000001"
+        ixz="0.0000000000001"
+        iyy="0.000119000000000001"
+        iyz="0.0000000000001"
+        izz="0.00008900000000001"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r1_joint"
+    type="revolute">
+    <origin
+      xyz="0.0730000000019553 0 0.0800000002558823"
+      rpy="0 0 0" />
+    <parent
+      link="raise_link" />
+    <child
+      link="r1_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="r2_link">
+    <inertial>
+      <origin
+        xyz="0.0690391832121831 -0.00867048855476518 9.80114446179625E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.110881462974977" />
+
+
+      <inertia
+        ixx="0.000104"
+        ixy="0.000057"
+        ixz="0.000000"
+        iyy="0.000242"
+        iyz="0.000000"
+        izz="0.000258" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r2_joint"
+    type="revolute">
+    <origin
+      xyz="0.0660000000014474 0.0469999999961243 0"
+      rpy="0 0 0" />
+    <parent
+      link="r1_link" />
+    <child
+      link="r2_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="r3_link">
+    <inertial>
+      <origin
+        xyz="0.0732217284484117 -0.031125780800493 -7.17204073907851E-14"
+        rpy="0 0 0" />
+      <mass
+        value="0.137001038428449" />
+
+      <inertia
+        ixx="0.000131"
+        ixy="0.000026"
+        ixz="0.000000"
+        iyy="0.000644"
+        iyz="0.000000"
+        izz="0.000641" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r3_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r3_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r3_joint"
+    type="revolute">
+    <origin
+      xyz="0.164099986647111 -0.0470000000123339 0"
+      rpy="0 0 0" />
+    <parent
+      link="r2_link" />
+    <child
+      link="r3_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="r4_link">
+    <inertial>
+      <origin
+        xyz="0.112094145104247 -0.0118412179656589 -4.5558889993913E-11"
+        rpy="0 0 0" />
+      <mass
+        value="0.0633750976117775" />
+
+
+      <inertia
+        ixx="0.000046"
+        ixy="0.000054"
+        ixz="0.000000"
+        iyy="0.000233"
+        iyz="0.000000"
+        izz="0.000259" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r4_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r4_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r4_joint"
+    type="revolute">
+    <origin
+      xyz="0.1859000000017 0.047690442813871 0"
+      rpy="0 0 0" />
+    <parent
+      link="r3_link" />
+    <child
+      link="r4_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="r5_link">
+    <inertial>
+      <origin
+        xyz="0.0294512346002174 -0.0189632693169138 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0265060586928656" />
+        Lxx = 0.000009	Lxy = 0.000004	Lxz = 0.000000
+	Lyx = 0.000004	Lyy = 0.000027	Lyz = 0.000000
+	Lzx = 0.000000	Lzy = 0.000000	Lzz = 0.000024
+
+      <inertia
+        ixx="0.000009"
+        ixy="0.000004"
+        ixz="0.000000"
+        iyy="0.000027"
+        iyz="0.000000"
+        izz="0.000024" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r5_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r5_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r5_joint"
+    type="revolute">
+    <origin
+      xyz="0.236049999997127 -0.0485581190286188 0"
+      rpy="0 0 0" />
+    <parent
+      link="r4_link" />
+    <child
+      link="r5_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="r6_link">
+    <inertial>
+      <origin
+        xyz="0.0254220502811959 -0.00365785524415893 1.63935531816151E-12"
+        rpy="0 0 0" />
+      <mass
+        value="0.0572742902536675" />
+
+      <inertia
+        ixx="0.000012"
+        ixy="-0.000009"
+        ixz="0.000000"
+        iyy="0.000083"
+        iyz="0.000000"
+        izz="0.000083" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r6_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r6_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r6_joint"
+    type="revolute">
+    <origin
+      xyz="0.0630000000027156 -0.0228823235596749 0"
+      rpy="0 0 0" />
+    <parent
+      link="r5_link" />
+    <child
+      link="r6_link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="sucker">
+    <inertial>
+      <origin
+        xyz="-0.0210176102386019 1.95963875748715E-14 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0915258888584067" />
+
+
+      <inertia
+        ixx="0.000005"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000023"
+        iyz="0.000000"
+        izz="0.000023" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/sucker.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.615686274509804 0.643137254901961 0.674509803921569 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/sucker.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="sucker_joint"
+    type="revolute">
+    <origin
+      xyz="0.116348988405816 0.0237500000077588 0"
+      rpy="0 0 0" />
+    <parent
+      link="r6_link" />
+    <child
+      link="sucker" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="r6_motor">
+    <inertial>
+      <origin
+        xyz="-1.11022302462516E-16 0.0278616257375456 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.375000" />
+
+      <inertia
+        ixx="0.000172"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000151"
+        iyz="0.000000"
+        izz="0.000172" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r6_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r6_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r6_motor"
+    type="fixed">
+    <origin
+      xyz="0.0630000000027156 -0.0228823235596749 0"
+      rpy="0 0 0" />
+    <parent
+      link="r5_link" />
+    <child
+      link="r6_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="r5_motor">
+    <inertial>
+      <origin
+        xyz="-0.0399359056329798 3.72412604227046E-14 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.325000" />
+
+
+      <inertia
+        ixx="0.000131"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000129"
+        iyz="0.000000"
+        izz="0.000129" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r5_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r5_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r5_motor"
+    type="fixed">
+    <origin
+      xyz="0.236049999997127 -0.0485581190286188 0"
+      rpy="0 0 0" />
+    <parent
+      link="r4_link" />
+    <child
+      link="r5_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="r4_motor">
+    <inertial>
+      <origin
+        xyz="-1.11022302462516E-16 -0.0435139621848441 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.375000" />
+
+
+      <inertia
+        ixx="0.000171"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000152"
+        iyz="0.000000"
+        izz="0.000171" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r4_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r4_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r4_motor"
+    type="fixed">
+    <origin
+      xyz="0.1859000000017 0.047690442813871 0"
+      rpy="0 0 0" />
+    <parent
+      link="r3_link" />
+    <child
+      link="r4_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="r3_motor">
+    <inertial>
+      <origin
+        xyz="-0.0376890350356102 3.51297728184125E-14 -1.11022302462516E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.701000" />
+
+
+
+      <inertia
+        ixx="0.000727"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000480"
+        iyz="0.000000"
+        izz="0.000480" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r3_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r3_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r3_motor"
+    type="fixed">
+    <origin
+      xyz="0.164099986647111 -0.0470000000123339 0"
+      rpy="0 0 0" />
+    <parent
+      link="r2_link" />
+    <child
+      link="r3_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="r2_motor">
+    <inertial>
+      <origin
+        xyz="2.77555756156289E-17 -0.0431337549128584 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.812000" />
+
+      <inertia
+        ixx="0.000571"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000779"
+        iyz="0.000000"
+        izz="0.000571" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r2_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/r2_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r2_motor"
+    type="fixed">
+    <origin
+      xyz="0.0660000000014474 0.0469999999961243 0"
+      rpy="0 0 0" />
+    <parent
+      link="r1_link" />
+    <child
+      link="r2_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="h1_link">
+    <inertial>
+      <origin
+        xyz="0.0171781233950788 -1.58747169654278E-14 0.0170854878165114"
+        rpy="0 0 0" />
+      <mass
+        value="0.0124964179718106" />
+
+      <inertia
+        ixx="0.000006"
+        ixy="0.000000"
+        ixz="-0.000003"
+        iyy="0.000008"
+        iyz="0.000000"
+        izz="0.000006" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/h1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/h1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="h1_link"
+    type="revolute">
+    <origin
+      xyz="0.00249999999862164 0 0.212899999999965"
+      rpy="0 0 0" />
+    <parent
+      link="raise_link" />
+    <child
+      link="h1_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="h2_link">
+    <inertial>
+      <origin
+        xyz="-0.00149999999994305 0.0558887718296735 -0.0019999999999627"
+        rpy="0 0 0" />
+      <mass
+        value="0.0702083418321562" />
+
+      <inertia
+        ixx="0.000020"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000043"
+        iyz="0.000000"
+        izz="0.000058" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/h2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/h2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="h2_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0038999999990365 0 0.0370000000000029"
+      rpy="0 0 0" />
+    <parent
+      link="h1_link" />
+    <child
+      link="h2_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="h2_motor">
+    <inertial>
+      <origin
+        xyz="0.0169499999991866 -1.57951321320203E-14 1.11022302462516E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.0639266195717556" />
+
+      <inertia
+        ixx="0.000019"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000016"
+        iyz="0.000000"
+        izz="0.000016" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/h2_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/h2_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="h2_motor"
+    type="fixed">
+    <origin
+      xyz="-0.0038999999990365 0 0.0370000000000029"
+      rpy="0 0 0" />
+    <parent
+      link="h1_link" />
+    <child
+      link="h2_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="l1_link">
+    <inertial>
+      <origin
+        xyz="-0.0248582980555671 0.0133433903281259 0.00132674380400122"
+        rpy="0 0 0" />
+      <mass
+        value="0.0358741287455098" />
+
+
+      <inertia
+        ixx="0.000016"
+        ixy="0.000007"
+        ixz="0.000001"
+        iyy="0.000031"
+        iyz="0.000000"
+        izz="0.000030" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l1_joint"
+    type="revolute">
+    <origin
+      xyz="-0.111999999998029 0 0.0799999999999754"
+      rpy="0 0 0" />
+    <parent
+      link="raise_link" />
+    <child
+      link="l1_link" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="l2_link">
+    <inertial>
+      <origin
+        xyz="-0.0542908494753834 -0.00585526454882358 0.000374747363474093"
+        rpy="0 0 0" />
+      <mass
+        value="0.0698449760510581" />
+
+      <inertia
+        ixx="0.000050"
+        ixy="-0.000022"
+        ixz="0.000000"
+        iyy="0.000120"
+        iyz="0.000000"
+        izz="0.000104" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l2_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0504999999988377 0.0357499999937866 -0.0200000000000022"
+      rpy="0 0 0" />
+    <parent
+      link="l1_link" />
+    <child
+      link="l2_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="l3_link">
+    <inertial>
+      <origin
+        xyz="-0.0758564390080181 2.36408521503059E-13 0.0220517939410472"
+        rpy="0 0 0" />
+      <mass
+        value="0.039919606065731" />
+
+
+      <inertia
+        ixx="0.000009"
+        ixy="0.000000"
+        ixz="0.000014"
+        iyy="0.000143"
+        iyz="0.000000"
+        izz="0.000140" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l3_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l3_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l3_joint"
+    type="revolute">
+    <origin
+      xyz="-0.147500000001163 -0.0357500000002377 0.0200000000000035"
+      rpy="0 0 0" />
+    <parent
+      link="l2_link" />
+    <child
+      link="l3_link" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="l4_link">
+    <inertial>
+      <origin
+        xyz="-0.109544614774018 -0.0174351060530148 -0.0338030166838402"
+        rpy="0 0 0" />
+      <mass
+        value="0.164695050003031" />
+
+
+      <inertia
+        ixx="0.000052"
+        ixy="-0.000028"
+        ixz="-0.000024"
+        iyy="0.000605"
+        iyz="0.000000"
+        izz="0.000583" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l4_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l4_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l4_joint"
+    type="revolute">
+    <origin
+      xyz="-0.202499999999972 0 0.0322000000000007"
+      rpy="0 0 0" />
+    <parent
+      link="l3_link" />
+    <child
+      link="l4_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="l5_link">
+    <inertial>
+      <origin
+        xyz="-0.0181741743699587 1.42967063695078E-11 -0.0187294075211327"
+        rpy="0 0 0" />
+      <mass
+        value="0.0155742741372983" />
+
+
+      <inertia
+        ixx="0.000004"
+        ixy="0.000000"
+        ixz="-0.000002"
+        iyy="0.000007"
+        iyz="0.000000"
+        izz="0.000006" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l5_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l5_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l5_joint"
+    type="revolute">
+    <origin
+      xyz="-0.225749999999173 0 -0.0321499999999831"
+      rpy="0 0 0" />
+    <parent
+      link="l4_link" />
+    <child
+      link="l5_link" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="l6_motor">
+    <inertial>
+      <origin
+        xyz="-0.0546987949569473 -3.50584673695088E-11 0.00163863646025508"
+        rpy="0 0 0" />
+      <mass
+        value="0.0993962384458732" />
+
+      <inertia
+        ixx="0.000030"
+        ixy="0.000000"
+        ixz="0.000003"
+        iyy="0.000058"
+        iyz="0.000000"
+        izz="0.000043" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l6_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l6_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l6_motor"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="l5_link" />
+    <child
+      link="l6_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="l5_motor">
+    <inertial>
+      <origin
+        xyz="0.0247976093975618 -2.52786625951873E-14 -0.00943497153944273"
+        rpy="0 0 0" />
+      <mass
+        value="0.0339163715186898" />
+
+
+
+      <inertia
+        ixx="0.000006"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000010"
+        iyz="0.000000"
+        izz="0.000006" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l5_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l5_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l5_motor"
+    type="fixed">
+    <origin
+      xyz="-0.225749999999173 0 -0.0321499999999831"
+      rpy="0 0 0" />
+    <parent
+      link="l4_link" />
+    <child
+      link="l5_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="l4_motor">
+    <inertial>
+      <origin
+        xyz="0.0185512050438822 2.1524703487765E-18 -0.0305613635397507"
+        rpy="0 0 0" />
+      <mass
+        value="0.0993962384458733" />
+
+      <inertia
+        ixx="0.000030"
+        ixy="0.000000"
+        ixz="0.000003"
+        iyy="0.000058"
+        iyz="0.000000"
+        izz="0.000043" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l4_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l4_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l4_motor"
+    type="fixed">
+    <origin
+      xyz="-0.202499999999972 0 0.0322000000000007"
+      rpy="0 0 0" />
+    <parent
+      link="l3_link" />
+    <child
+      link="l4_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="l3_motor">
+    <inertial>
+      <origin
+        xyz="0.0290613635397518 -4.38050921364123E-17 -0.0185512050438823"
+        rpy="0 0 0" />
+      <mass
+        value="0.0993962384458731" />
+
+      <inertia
+        ixx="0.000043"
+        ixy="0.000000"
+        ixz="0.000003"
+        iyy="0.000058"
+        iyz="0.000000"
+        izz="0.000030" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l3_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l3_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l3_motor"
+    type="fixed">
+    <origin
+      xyz="-0.147500000001163 -0.0357500000002377 0.0200000000000035"
+      rpy="0 0 0" />
+    <parent
+      link="l2_link" />
+    <child
+      link="l3_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="l2_motor">
+    <inertial>
+      <origin
+        xyz="-5.09037256790634E-14 -0.0547760289639129 0.0271786714603754"
+        rpy="0 0 0" />
+      <mass
+        value="0.356252756325458" />
+
+      <inertia
+        ixx="0.000793"
+        ixy="0.000000"
+        ixz="0.000000"
+        iyy="0.000668"
+        iyz="0.000093"
+        izz="0.000479" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l2_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://simple3/meshes/l2_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l2_motor"
+    type="fixed">
+    <origin
+      xyz="-0.0504999999988377 0.0357499999937866 -0.0200000000000022"
+      rpy="0 0 0" />
+    <parent
+      link="l1_link" />
+    <child
+      link="l2_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
