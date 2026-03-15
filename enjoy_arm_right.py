@@ -1,33 +1,37 @@
 """
-MediPick Arm0 可视化/演示脚本
+MediPick 右臂可视化/演示脚本
 
 用于加载训练好的模型并可视化执行效果
 
 使用方法:
-    python enjoy_arm0.py                              # 使用最佳模型
-    python enjoy_arm0.py models/medipick_arm0_xxx.zip # 使用指定模型
+    python enjoy_arm_right.py                              # 使用最佳模型
+    python enjoy_arm_right.py models/medipick_arm_right_xxx.zip # 使用指定模型
+    python enjoy_arm_right.py --record                     # 录制视频
+    python enjoy_arm_right.py --record models/xxx.zip     # 录制视频并指定模型
 """
 import sys
 import glob
 import os
 import numpy as np
+import click
 from stable_baselines3 import PPO
-from envs.medipick_arm_0 import MediPickArm0Env
+from envs.medipick_arm_right import MediPickArmRightEnv
 
 
-def enjoy(model_path=None, num_episodes=3, max_steps=1000):
+def enjoy(model_path=None, record=False, num_episodes=3, max_steps=1000):
     """
     加载模型并可视化执行
     
     参数:
         model_path: 模型文件路径,如果不提供则尝试加载best_model
+        record: 是否录制视频
         num_episodes: 执行多少个episode
         max_steps: 每个episode最多多少步
     """
     # ==================== 1. 加载模型 ====================
     if model_path is None:
         # 尝试默认路径 - 按时间戳排序找最新的
-        model_dirs = sorted(glob.glob("models/medipick_arm0_*/"), reverse=True)
+        model_dirs = sorted(glob.glob("models/medipick_arm_right_*/"), reverse=True)
         
         # 默认路径列表
         default_paths = []
@@ -41,12 +45,6 @@ def enjoy(model_path=None, num_episodes=3, max_steps=1000):
             if os.path.exists(final):
                 default_paths.append(final)
         
-        # 也检查旧路径格式
-        default_paths.extend([
-            "models/medipick_arm0/best_model/best_model.zip",
-            "models/medipick_arm0/medipick_arm0_final.zip"
-        ])
-        
         for path in default_paths:
             try:
                 model = PPO.load(path)
@@ -57,7 +55,7 @@ def enjoy(model_path=None, num_episodes=3, max_steps=1000):
                 continue
         else:
             print("错误: 无法找到训练好的模型!")
-            print("请先运行训练: python train_arm0.py")
+            print("请先运行训练: python train_arm_right.py")
             return
     else:
         try:
@@ -69,7 +67,26 @@ def enjoy(model_path=None, num_episodes=3, max_steps=1000):
 
     # ==================== 2. 创建环境 ====================
     print("\n创建MuJoCo环境...")
-    env = MediPickArm0Env(model_path="models/scene.xml", render_mode="human")
+    
+    if record:
+        # 录制视频模式 - 使用固定摄像头
+        env = MediPickArmRightEnv(model_path="models/scene.xml", render_mode="rgb_array")
+        
+        # 使用 gymnasium 的 RecordVideo
+        from gymnasium.wrappers import RecordVideo
+        video_folder = "videos"
+        os.makedirs(video_folder, exist_ok=True)
+        env = RecordVideo(
+            env, 
+            video_folder=video_folder,
+            episode_trigger=lambda x: True,
+            video_length=max_steps,
+            name_prefix="medipick_right"
+        )
+        print(f"视频将保存到: {video_folder}/")
+    else:
+        # 交互模式 - 使用固定摄像头
+        env = MediPickArmRightEnv(model_path="models/scene.xml", render_mode="human")
     
     print(f"观测空间: {env.observation_space.shape}")
     print(f"动作空间: {env.action_space.shape}")
@@ -123,12 +140,13 @@ def enjoy(model_path=None, num_episodes=3, max_steps=1000):
     env.close()
 
 
+@click.command()
+@click.option('--record', is_flag=True, help='录制视频')
+@click.argument('model_path', required=False, default=None)
+def main(record, model_path):
+    """MediPick 右臂模型演示"""
+    enjoy(model_path=model_path, record=record, num_episodes=3)
+
+
 if __name__ == "__main__":
-    # 处理命令行参数
-    if len(sys.argv) > 1:
-        model_path = sys.argv[1]
-        print(f"使用指定模型: {model_path}")
-    else:
-        model_path = None
-    
-    enjoy(model_path=model_path, num_episodes=3)
+    main()

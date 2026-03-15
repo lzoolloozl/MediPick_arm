@@ -1,8 +1,10 @@
 """
-MediPick Arm0 PPO训练脚本 - 参考 so100-mujoco-rl 项目
+MediPick 右臂 PPO训练脚本 - 只有右臂(r1-r6)和升降杆(raise)可以动
 支持无限训练直到成功率接近100%或无法继续学习才停止
+支持训练时录制视频
 """
 import os
+import sys
 import torch
 import numpy as np
 from datetime import datetime
@@ -17,17 +19,17 @@ from stable_baselines3.common.callbacks import (
 )
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import DummyVecEnv
-from stable_baselines3.common.callbacks import EvalCallback, CheckpointCallback
-from envs.medipick_arm_0 import MediPickArm0Env
+
+# 添加项目根目录到路径
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from rl.envs.medipick_arm_right import MediPickArmRightEnv
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
 
-
 # 目录配置
-MODEL_DIR = "models"
-LOG_DIR = "logs"
-RECORDING_DIR = "videos"  # 视频保存目录
+MODEL_DIR = "assets/checkpoints"
+LOG_DIR = "assets/logs"
 
 # 训练停止条件
 SUCCESS_THRESHOLD = 0.95  # 成功率阈值 (95%)
@@ -50,17 +52,29 @@ class TensorboardRewardCallback(BaseCallback):
         return True
 
 
-def make_env(render_mode='rgb_array'):
+def make_env(render_mode=None):
     """创建环境"""
-    env = MediPickArm0Env(model_path="models/scene.xml", render_mode=render_mode)
+    env = MediPickArmRightEnv(model_path="assets/models/scene.xml", render_mode=render_mode)
     env = Monitor(env)
     return env
 
 
-def evaluate_model(ppo_model, n_eval_episodes=10):
+def evaluate_model(ppo_model, n_eval_episodes=10, video_folder=None):
     """评估模型成功率"""
-    # 创建独立的评估环境
-    eval_env = MediPickArm0Env(model_path="models/scene.xml", render_mode=None)
+    # 使用rgb_array模式以便录制视频
+    render_mode = "rgb_array" if video_folder else None
+    eval_env = MediPickArmRightEnv(model_path="assets/models/scene.xml", render_mode=render_mode)
+    
+    # 如果需要录制视频
+    if video_folder:
+        from gymnasium.wrappers import RecordVideo
+        eval_env = RecordVideo(
+            eval_env,
+            video_folder=video_folder,
+            episode_trigger=lambda x: x == 0,
+            video_length=500,
+            name_prefix="eval_video"
+        )
     
     successes = 0
     total_rewards = []
@@ -70,7 +84,7 @@ def evaluate_model(ppo_model, n_eval_episodes=10):
         done = False
         episode_reward = 0
         step_count = 0
-        max_steps = 500  # 限制每回合最大步数，避免卡住
+        max_steps = 500
         
         while not done and step_count < max_steps:
             action, _ = ppo_model.predict(obs, deterministic=True)
@@ -95,30 +109,26 @@ def evaluate_model(ppo_model, n_eval_episodes=10):
 
 
 @click.command()
-@click.option('--record/--no-record', default=False, help='启用视频录制')
 @click.option('--steps', default=-1, type=int, help='训练步数 (-1表示无限训练直到成功)')
 @click.option('--success-threshold', default=0.95, type=float, help='成功率阈值 (0-1)')
 @click.option('--consecutive', default=3, type=int, help='连续达到阈值次数')
-def main(record, steps, success_threshold, consecutive):
+@click.option('--record/--no-record', default=False, help='训练时录制视频')
+def main(steps, success_threshold, consecutive, record):
     """训练脚本"""
-    # 创建目录
     os.makedirs(MODEL_DIR, exist_ok=True)
     os.makedirs(LOG_DIR, exist_ok=True)
-    os.makedirs(RECORDING_DIR, exist_ok=True)
     
-    # 使用时间戳创建唯一目录
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-    model_dir = f"{MODEL_DIR}/medipick_arm0_{run_id}"
-    log_dir = f"{LOG_DIR}/arm0_run_{run_id}"
+    model_dir = f"{MODEL_DIR}/medipick_arm_right_{run_id}"
+    log_dir = f"{LOG_DIR}/arm_right_run_{run_id}"
     
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
     
-    # 确定训练步数
     if steps <= 0:
         steps = MAX_STEPS
         print("=" * 50)
-        print(f"MediPick Arm0 PPO 训练 (无限模式)")
+        print(f"MediPick 右臂 PPO 训练 (无限模式)")
         print(f"训练ID: {run_id}")
         print(f"最大步数: {MAX_STEPS:,}")
         print(f"成功率阈值: {success_threshold*100}%")
@@ -126,18 +136,16 @@ def main(record, steps, success_threshold, consecutive):
         print(f"视频录制: {'启用' if record else '禁用'}")
     else:
         print("=" * 50)
-        print(f"MediPick Arm0 PPO 训练")
+        print(f"MediPick 右臂 PPO 训练")
         print(f"训练ID: {run_id}")
         print(f"训练步数: {steps:,}")
         print(f"视频录制: {'启用' if record else '禁用'}")
     
     print("=" * 50)
     
-    # 创建环境
-    env = make_env(render_mode='rgb_array')
+    env = make_env(render_mode=None)
     env = DummyVecEnv([lambda: env])
     
-    # 创建模型
     model = PPO(
         "MlpPolicy",
         env=env,
@@ -158,43 +166,36 @@ def main(record, steps, success_threshold, consecutive):
     print(f"tensorboard --logdir {os.path.abspath(log_dir)}")
     print("=" * 50)
     
-    # 评估回调
     eval_callback = EvalCallback(
         env,
         best_model_save_path=model_dir,
         log_path=model_dir,
-        eval_freq=10000,  # 每10000步评估一次
+        eval_freq=10000,
         deterministic=True,
         render=False,
         n_eval_episodes=10,
         verbose=1
     )
     
-    # 检查点回调
     checkpoint_callback = CheckpointCallback(
         save_freq=10000,
         save_path=model_dir,
-        name_prefix="arm0_step"
+        name_prefix="arm_right_step"
     )
     
-    # 奖励记录回调
     tb_reward_callback = TensorboardRewardCallback(eval_callback, verbose=0)
     
-    # 连续成功计数
     consecutive_count = 0
     best_success_rate = 0.0
     
-    # 开始训练
     total_steps = 0
     iteration = 0
     
     try:
-        # 直接开始训练，先不评估
         while total_steps < steps:
             iteration += 1
             print(f"\n--- 迭代 {iteration} (已训练: {total_steps:,} 步) ---")
             
-            # 训练下一批
             batch_steps = min(10000, steps - total_steps)
             model.learn(
                 total_timesteps=batch_steps,
@@ -207,13 +208,13 @@ def main(record, steps, success_threshold, consecutive):
             )
             total_steps += batch_steps
             
-            # 训练完成后评估
+            # 评估模型 (每次评估都录制视频)
+            video_folder = model_dir if record else None
             print("评估模型...")
-            success_rate, mean_reward = evaluate_model(model, n_eval_episodes=10)
+            success_rate, mean_reward = evaluate_model(model, n_eval_episodes=10, video_folder=video_folder)
             print(f"当前成功率: {success_rate*100:.1f}%")
             print(f"平均奖励: {mean_reward:.2f}")
             
-            # 检查是否达到成功阈值
             if success_rate >= success_threshold:
                 consecutive_count += 1
                 print(f"  达到阈值! 连续次数: {consecutive_count}/{consecutive}")
@@ -223,31 +224,31 @@ def main(record, steps, success_threshold, consecutive):
             else:
                 consecutive_count = 0
             
-            # 检查是否有改善
             if success_rate > best_success_rate:
                 best_success_rate = success_rate
             
-            # 检查是否已经收敛（连续多次没有改善且成功率低）
-            if total_steps > 100000 and success_rate < 0.1:
+            if success_rate < 0.1 and total_steps > 50000:
                 print("\n⚠️ 训练似乎没有进展，成功率很低")
                 print("继续训练...")
             
     except KeyboardInterrupt:
         print("\n训练被手动停止")
     finally:
-        # 最终评估
         print("\n" + "=" * 50)
         print("最终评估:")
-        final_success_rate, final_reward = evaluate_model(model, n_eval_episodes=20)
+        # 最终评估也录制视频
+        final_video_folder = model_dir if record else None
+        final_success_rate, final_reward = evaluate_model(model, n_eval_episodes=20, video_folder=final_video_folder)
         print(f"最终成功率: {final_success_rate*100:.1f}%")
         print(f"最终平均奖励: {final_reward:.2f}")
         
-        # 保存最终模型
         final_path = f"{model_dir}/final_model"
         model.save(final_path)
         print(f"模型已保存到: {final_path}")
-    
-    print("\n训练完成!")
+        
+        print("\n训练完成!")
+        print(f"视频保存在: {model_dir}/")
+        print("如需演示，请使用: python rl/enjoy_arm_right.py")
 
 
 if __name__ == "__main__":

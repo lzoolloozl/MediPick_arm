@@ -1,6 +1,11 @@
 """
-MediPick Arm0 PPO训练脚本 - 参考 so100-mujoco-rl 项目
+MediPick 右臂 PPO训练脚本 - 只有右臂(r1-r6)和升降杆(raise)可以动
 支持无限训练直到成功率接近100%或无法继续学习才停止
+支持训练时录制视频
+
+修复版:
+- 训练环境使用render_mode=None加快训练速度
+- 支持训练时录制视频
 """
 import os
 import torch
@@ -18,7 +23,7 @@ from stable_baselines3.common.callbacks import (
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.callbacks import EvalCallback, CheckpointCallback
-from envs.medipick_arm_0 import MediPickArm0Env
+from envs.medipick_arm_right import MediPickArmRightEnv
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
@@ -50,9 +55,9 @@ class TensorboardRewardCallback(BaseCallback):
         return True
 
 
-def make_env(render_mode='rgb_array'):
+def make_env(render_mode=None, camera_name='fixed'):
     """创建环境"""
-    env = MediPickArm0Env(model_path="models/scene.xml", render_mode=render_mode)
+    env = MediPickArmRightEnv(model_path="models/scene.xml", render_mode=render_mode)
     env = Monitor(env)
     return env
 
@@ -60,7 +65,7 @@ def make_env(render_mode='rgb_array'):
 def evaluate_model(ppo_model, n_eval_episodes=10):
     """评估模型成功率"""
     # 创建独立的评估环境
-    eval_env = MediPickArm0Env(model_path="models/scene.xml", render_mode=None)
+    eval_env = MediPickArmRightEnv(model_path="models/scene.xml", render_mode=None)
     
     successes = 0
     total_rewards = []
@@ -95,11 +100,11 @@ def evaluate_model(ppo_model, n_eval_episodes=10):
 
 
 @click.command()
-@click.option('--record/--no-record', default=False, help='启用视频录制')
 @click.option('--steps', default=-1, type=int, help='训练步数 (-1表示无限训练直到成功)')
 @click.option('--success-threshold', default=0.95, type=float, help='成功率阈值 (0-1)')
 @click.option('--consecutive', default=3, type=int, help='连续达到阈值次数')
-def main(record, steps, success_threshold, consecutive):
+@click.option('--record/--no-record', default=False, help='训练时录制视频')
+def main(steps, success_threshold, consecutive, record):
     """训练脚本"""
     # 创建目录
     os.makedirs(MODEL_DIR, exist_ok=True)
@@ -108,8 +113,8 @@ def main(record, steps, success_threshold, consecutive):
     
     # 使用时间戳创建唯一目录
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-    model_dir = f"{MODEL_DIR}/medipick_arm0_{run_id}"
-    log_dir = f"{LOG_DIR}/arm0_run_{run_id}"
+    model_dir = f"{MODEL_DIR}/medipick_arm_right_{run_id}"
+    log_dir = f"{LOG_DIR}/arm_right_run_{run_id}"
     
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
@@ -118,7 +123,7 @@ def main(record, steps, success_threshold, consecutive):
     if steps <= 0:
         steps = MAX_STEPS
         print("=" * 50)
-        print(f"MediPick Arm0 PPO 训练 (无限模式)")
+        print(f"MediPick 右臂 PPO 训练 (无限模式)")
         print(f"训练ID: {run_id}")
         print(f"最大步数: {MAX_STEPS:,}")
         print(f"成功率阈值: {success_threshold*100}%")
@@ -126,15 +131,15 @@ def main(record, steps, success_threshold, consecutive):
         print(f"视频录制: {'启用' if record else '禁用'}")
     else:
         print("=" * 50)
-        print(f"MediPick Arm0 PPO 训练")
+        print(f"MediPick 右臂 PPO 训练")
         print(f"训练ID: {run_id}")
         print(f"训练步数: {steps:,}")
         print(f"视频录制: {'启用' if record else '禁用'}")
     
     print("=" * 50)
     
-    # 创建环境
-    env = make_env(render_mode='rgb_array')
+    # 训练环境 - 不使用rgb_array渲染加快速度
+    env = make_env(render_mode=None)
     env = DummyVecEnv([lambda: env])
     
     # 创建模型
@@ -158,14 +163,14 @@ def main(record, steps, success_threshold, consecutive):
     print(f"tensorboard --logdir {os.path.abspath(log_dir)}")
     print("=" * 50)
     
-    # 评估回调
+    # 评估回调 - render=False
     eval_callback = EvalCallback(
         env,
         best_model_save_path=model_dir,
         log_path=model_dir,
         eval_freq=10000,  # 每10000步评估一次
         deterministic=True,
-        render=False,
+        render=False,  # Bug修复: 不渲染
         n_eval_episodes=10,
         verbose=1
     )
@@ -174,7 +179,7 @@ def main(record, steps, success_threshold, consecutive):
     checkpoint_callback = CheckpointCallback(
         save_freq=10000,
         save_path=model_dir,
-        name_prefix="arm0_step"
+        name_prefix="arm_right_step"
     )
     
     # 奖励记录回调
@@ -187,6 +192,24 @@ def main(record, steps, success_threshold, consecutive):
     # 开始训练
     total_steps = 0
     iteration = 0
+    
+    # 视频录制相关
+    video_recorder = None
+    if record:
+        try:
+            from stable_baselines3.common.vec_env import VecVideoRecorder
+            # 使用固定摄像头录制
+            video_recorder = VecVideoRecorder(
+                env, 
+                RECORDING_DIR,
+                record_video_trigger=lambda x: x % 20000 == 0,  # 每20000步录制一次
+                video_length=500,
+                name_prefix=f"medipick_right_train_{run_id}"
+            )
+            print(f"视频录制已启用，视频将保存到: {RECORDING_DIR}")
+        except Exception as e:
+            print(f"视频录制初始化失败: {e}")
+            record = False
     
     try:
         # 直接开始训练，先不评估
@@ -227,8 +250,8 @@ def main(record, steps, success_threshold, consecutive):
             if success_rate > best_success_rate:
                 best_success_rate = success_rate
             
-            # 检查是否已经收敛（连续多次没有改善且成功率低）
-            if total_steps > 100000 and success_rate < 0.1:
+            # 检查是否已经收敛（连续多次没有改善）
+            if success_rate < 0.1 and total_steps > 50000:
                 print("\n⚠️ 训练似乎没有进展，成功率很低")
                 print("继续训练...")
             
@@ -246,8 +269,16 @@ def main(record, steps, success_threshold, consecutive):
         final_path = f"{model_dir}/final_model"
         model.save(final_path)
         print(f"模型已保存到: {final_path}")
-    
-    print("\n训练完成!")
+        
+        # 关闭视频录制器
+        if video_recorder is not None:
+            try:
+                video_recorder.close()
+            except:
+                pass
+        
+        print("\n训练完成!")
+        print("如需单独录制视频，请使用: python enjoy_arm_right.py --record")
 
 
 if __name__ == "__main__":
