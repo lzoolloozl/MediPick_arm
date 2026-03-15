@@ -1,21 +1,63 @@
 """
 MediPick 右臂训练环境 - 只有右臂(r1-r6)和升降杆(raise)可以动
 
-修复版:
-- 修复action_space被覆盖问题
-- 修复action值域映射到真实ctrlrange
-- 修复部分执行器控制问题
-- 锁定sucker_joint
-- 改进奖励函数
+奖励函数参数从配置文件读取
 """
 
 import os
+import json
+import random
 import numpy as np
 import mujoco
 from gymnasium import utils
 from gymnasium.envs.mujoco import MujocoEnv
 from gymnasium.spaces import Box
 from .utils import get_entry_plane_data, get_layer_bounds, get_slam_style_dist
+
+
+# 默认奖励参数
+DEFAULT_REWARD = {
+    "distance_weight": 10.0,
+    "approach_dist_1": 0.10,
+    "approach_reward_1": 5.0,
+    "approach_dist_2": 0.05,
+    "approach_reward_2": 15.0,
+    "approach_dist_3": 0.02,
+    "approach_reward_3": 50.0,
+    "approach_dist_4": 0.01,
+    "approach_reward_4": 100.0,
+    "success_reward": 500.0,
+    "obstacle_dist": 0.05,
+    "obstacle_penalty": 10.0,
+    "collision_penalty": 150.0
+}
+
+
+def load_reward_config():
+    """从配置文件加载奖励参数"""
+    # 先检查当前目录
+    config_path = os.path.join(os.path.dirname(__file__), "train_config.json")
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+                if 'reward' in config:
+                    return config['reward']
+        except:
+            pass
+    
+    # 再检查上级目录
+    config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "train_config.json")
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+                if 'reward' in config:
+                    return config['reward']
+        except:
+            pass
+    
+    return DEFAULT_REWARD
 
 
 class MediPickArmRightEnv(MujocoEnv, utils.EzPickle):
@@ -28,6 +70,9 @@ class MediPickArmRightEnv(MujocoEnv, utils.EzPickle):
     
     def __init__(self, model_path="../models/scene.xml", **kwargs):
         utils.EzPickle.__init__(self, **kwargs)
+        
+        # 加载奖励配置
+        self._reward_config = load_reward_config()
         
         # 观测空间维度: 7 + 7 + 3 + 3 + 6 + 2 + 1 + 3 = 32
         observation_space = Box(low=-np.inf, high=np.inf, shape=(32,), dtype=np.float32)
@@ -70,8 +115,8 @@ class MediPickArmRightEnv(MujocoEnv, utils.EzPickle):
         # sucker关节ID（用于锁定）
         self._sucker_joint_id = self.model.joint("sucker_joint").id
         
-        # 药盒body ID（用于固定位置）
-        self._box_body_id = self.model.body("pill_box").id
+        # 目标点body ID（用于获取位置）
+        self._box_body_id = self.model.body("target_point").id
         
         # 最大步数限制
         self._max_steps = 500
@@ -112,8 +157,8 @@ class MediPickArmRightEnv(MujocoEnv, utils.EzPickle):
     def _get_box_front_center_world(self):
         """获取box_front_center site的世界坐标"""
         box_front_site_local = np.array([0, -0.01, 0])
-        box_rot = self.data.body("pill_box").xmat.reshape(3, 3)
-        box_front_world = self.data.body("pill_box").xpos + box_rot @ box_front_site_local
+        box_rot = self.data.body("target_point").xmat.reshape(3, 3)
+        box_front_world = self.data.body("target_point").xpos + box_rot @ box_front_site_local
         return box_front_world
 
     def _get_obs(self):
@@ -199,32 +244,34 @@ class MediPickArmRightEnv(MujocoEnv, utils.EzPickle):
 
     def _get_rew(self, obs):
         """
-        改进的奖励函数:
-        - 距离奖励（减小权重）
-        - 成功分级奖励
-        - 朝向奖励
+        奖励函数 - 使用配置文件参数
         """
+        cfg = self._reward_config
         rel_pos = obs[29:32]
         distance = np.linalg.norm(rel_pos)
         
-        # Bug修复4: 减小距离奖励权重，避免梯度爆炸
-        reward = -distance * 10.0
+        # 1. 距离惩罚
+        reward = -distance * cfg['distance_weight']
         
-        # 成功分级奖励
+        # 2. 接近分级奖励
         contact_dist = self._check_contact_with_box_front()
-        if contact_dist < 0.10:
-            reward += 5.0  # 接近目标
-        if contact_dist < 0.05:
-            reward += 15.0  # 很接近
-        if contact_dist < 0.02:
-            reward += 50.0  # 接触
-        if contact_dist < 0.01:
-            reward += 100.0  # 成功接触
+        if contact_dist < cfg['approach_dist_1']:
+            reward += cfg['approach_reward_1']
+        if contact_dist < cfg['approach_dist_2']:
+            reward += cfg['approach_reward_2']
+        if contact_dist < cfg['approach_dist_3']:
+            reward += cfg['approach_reward_3']
+        if contact_dist < cfg['approach_dist_4']:
+            reward += cfg['approach_reward_4']
             
-        # 距离传感器惩罚
+        # 3. 成功奖励
+        if contact_dist < cfg['approach_dist_4']:
+            reward += cfg['success_reward']
+            
+        # 4. 障碍物距离惩罚
         d_suction = obs[28]
-        if d_suction < 0.05:
-            reward -= 10.0 * (0.05 - d_suction)
+        if d_suction < cfg['obstacle_dist']:
+            reward -= cfg['obstacle_penalty'] * (cfg['obstacle_dist'] - d_suction)
                 
         return reward
 
@@ -247,7 +294,7 @@ class MediPickArmRightEnv(MujocoEnv, utils.EzPickle):
         # 检测碰撞
         collided = self._check_collisions()
         if collided:
-            reward -= 150.0
+            reward -= self._reward_config['collision_penalty']
             
         # 检查终止条件
         contact_dist = self._check_contact_with_box_front()

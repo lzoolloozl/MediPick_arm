@@ -15,8 +15,14 @@ def get_entry_plane_data(data, model):
 
 # 2. 获取上下层 Z 轴高度 (标量)
 def get_layer_bounds(data):
-    z_upper = data.site('upper_limit').xpos[2]
-    z_lower = data.site('lower_limit').xpos[2]
+    """获取上下层边界，如果没有货架则返回默认值"""
+    try:
+        z_upper = data.site('upper_limit').xpos[2]
+        z_lower = data.site('lower_limit').xpos[2]
+    except KeyError:
+        # 没有货架时返回默认边界
+        z_upper = 1.2  # 默认上层高度
+        z_lower = 0.0   # 默认下层高度
     return z_upper, z_lower
 def get_slam_style_dist(model, data, site_name, body_names_to_exclude, max_dist=0.5):
     """

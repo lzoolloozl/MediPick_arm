@@ -30,6 +30,7 @@ logger = logging.getLogger(__name__)
 # 目录配置
 MODEL_DIR = "assets/checkpoints"
 LOG_DIR = "assets/logs"
+VIDEO_DIR = "assets/videos"  # 视频单独存放
 
 # 训练停止条件
 SUCCESS_THRESHOLD = 0.95  # 成功率阈值 (95%)
@@ -59,7 +60,7 @@ def make_env(render_mode=None):
     return env
 
 
-def evaluate_model(ppo_model, n_eval_episodes=10, video_folder=None):
+def evaluate_model(ppo_model, n_eval_episodes=10, video_folder=None, video_prefix="eval"):
     """评估模型成功率"""
     # 使用rgb_array模式以便录制视频
     render_mode = "rgb_array" if video_folder else None
@@ -68,18 +69,19 @@ def evaluate_model(ppo_model, n_eval_episodes=10, video_folder=None):
     # 如果需要录制视频
     if video_folder:
         from gymnasium.wrappers import RecordVideo
+        os.makedirs(video_folder, exist_ok=True)
         eval_env = RecordVideo(
             eval_env,
             video_folder=video_folder,
             episode_trigger=lambda x: x == 0,
             video_length=500,
-            name_prefix="eval_video"
+            name_prefix=video_prefix
         )
     
     successes = 0
     total_rewards = []
     
-    for _ in range(n_eval_episodes):
+    for episode_idx in range(n_eval_episodes):
         obs, info = eval_env.reset()
         done = False
         episode_reward = 0
@@ -117,13 +119,16 @@ def main(steps, success_threshold, consecutive, record):
     """训练脚本"""
     os.makedirs(MODEL_DIR, exist_ok=True)
     os.makedirs(LOG_DIR, exist_ok=True)
+    os.makedirs(VIDEO_DIR, exist_ok=True)
     
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     model_dir = f"{MODEL_DIR}/medipick_arm_right_{run_id}"
     log_dir = f"{LOG_DIR}/arm_right_run_{run_id}"
+    video_dir = f"{VIDEO_DIR}/medipick_arm_right_{run_id}"  # 视频单独存放
     
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
+    os.makedirs(video_dir, exist_ok=True)
     
     if steps <= 0:
         steps = MAX_STEPS
@@ -141,6 +146,9 @@ def main(steps, success_threshold, consecutive, record):
         print(f"训练步数: {steps:,}")
         print(f"视频录制: {'启用' if record else '禁用'}")
     
+    print("=" * 50)
+    print(f"模型保存目录: {model_dir}")
+    print(f"视频保存目录: {video_dir}")
     print("=" * 50)
     
     env = make_env(render_mode=None)
@@ -190,6 +198,7 @@ def main(steps, success_threshold, consecutive, record):
     
     total_steps = 0
     iteration = 0
+    video_count = 0
     
     try:
         while total_steps < steps:
@@ -209,11 +218,25 @@ def main(steps, success_threshold, consecutive, record):
             total_steps += batch_steps
             
             # 评估模型 (每次评估都录制视频)
-            video_folder = model_dir if record else None
+            if record:
+                video_count += 1
+                video_folder = video_dir
+                video_prefix = f"eval_{video_count:03d}_step{total_steps}"
+            else:
+                video_folder = None
+                video_prefix = "eval"
+            
             print("评估模型...")
-            success_rate, mean_reward = evaluate_model(model, n_eval_episodes=10, video_folder=video_folder)
+            success_rate, mean_reward = evaluate_model(
+                model, n_eval_episodes=10, 
+                video_folder=video_folder, 
+                video_prefix=video_prefix
+            )
             print(f"当前成功率: {success_rate*100:.1f}%")
             print(f"平均奖励: {mean_reward:.2f}")
+            
+            if record and video_folder:
+                print(f"视频已保存到: {video_folder}/{video_prefix}.mp4")
             
             if success_rate >= success_threshold:
                 consecutive_count += 1
@@ -237,8 +260,19 @@ def main(steps, success_threshold, consecutive, record):
         print("\n" + "=" * 50)
         print("最终评估:")
         # 最终评估也录制视频
-        final_video_folder = model_dir if record else None
-        final_success_rate, final_reward = evaluate_model(model, n_eval_episodes=20, video_folder=final_video_folder)
+        if record:
+            video_count += 1
+            final_video_folder = video_dir
+            final_video_prefix = f"final_eval_step{total_steps}"
+        else:
+            final_video_folder = None
+            final_video_prefix = "eval"
+            
+        final_success_rate, final_reward = evaluate_model(
+            model, n_eval_episodes=20, 
+            video_folder=final_video_folder,
+            video_prefix=final_video_prefix
+        )
         print(f"最终成功率: {final_success_rate*100:.1f}%")
         print(f"最终平均奖励: {final_reward:.2f}")
         
@@ -247,7 +281,8 @@ def main(steps, success_threshold, consecutive, record):
         print(f"模型已保存到: {final_path}")
         
         print("\n训练完成!")
-        print(f"视频保存在: {model_dir}/")
+        print(f"模型保存在: {model_dir}/")
+        print(f"视频保存在: {video_dir}/")
         print("如需演示，请使用: python rl/enjoy_arm_right.py")
 
 

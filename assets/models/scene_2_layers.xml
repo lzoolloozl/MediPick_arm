@@ -1,0 +1,34 @@
+<mujoco model="MediPick_Scene_2Layers">
+  <!-- 课程2: 2层货架场景 -->
+  <option gravity="0 0 -9.81" timestep="0.002" cone="elliptic" impratio="10"/>
+  <include file="simple3/urdf/simple3_test2_include.xml"/>
+  <visual>
+  <headlight ambient="0.5 0.5 0.5" diffuse="0.5 0.5 0.5" specular="0 0 0"/>
+  </visual>
+  <worldbody>
+    <geom name="floor" type="plane" pos="0 0 0" size="5 5 0.01" rgba="0.4 0.4 0.4 1"/>
+    <site name="entry_plane" 
+      type="box" 
+      size="0.44 0.001 0.5" 
+      pos="1.375 -1.85 0.6" 
+      rgba="1 0 0 0.3" />
+    <camera name="fixed" pos="1.5 -1.0 1.5" xyaxes="0 1 0 -1 0 1" mode="fixed"/>
+    
+    <!-- 2层货架 (只保留最上层和最下层) -->
+    <geom size="0.44 0.185 0.0025" pos="1.375 -1.6643 0.183876" quat="0.999048 0.0436195 -1.80595e-07 -1.65485e-07" type="box"/>
+    <geom size="0.44 0.185 0.0025" pos="1.375 -1.6643 0.933876" quat="0.999048 0.0436195 -1.80595e-07 -1.65485e-07" type="box"/>
+    <!-- 货架框架 -->
+    <geom size="0.015 0.03 0.6" pos="1.79 -1.44 0.6" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="box"/>
+    <geom size="0.015 0.03 0.6" pos="0.96 -1.44 0.6" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="box"/>
+    <geom size="0.44 0.005 0.525" pos="1.375 -1.475 0.675" quat="1 -1.73205e-07 -1.73205e-07 -1.73205e-07" type="box"/>
+    
+    <!-- 目标点 - 只有可视化属性，无物理属性 -->
+    <body name="target_point" pos="1.375 -1.66 0.726">
+        <!-- 可视化盒子，无物理属性 -->
+        <geom name="target_visual" type="box" size="0.06 0.01 0.035" rgba="0.2 0.8 0.2 0.5" contype="0" conaffinity="0"/>
+        <site name="box_front_center" pos="0 -0.01 0" size="0.005" rgba="1 1 0 1"/>
+        <site name="upper_limit" pos="0 0 0.21" size="0.01" rgba="0 0 1 0.2"/>
+        <site name="lower_limit" pos="0 0 -0.035" size="0.01" rgba="0 0 1 0.2"/>
+    </body>
+  </worldbody>
+</mujoco>

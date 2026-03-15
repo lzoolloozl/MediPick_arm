@@ -1,0 +1,70 @@
+{
+    "curriculum": {
+        "start_course": 1,
+        "end_course": 5,
+        "auto_advance": true,
+        "reward_threshold": -100,
+        "consecutive_success": 3
+    },
+    "courses": {
+        "1": {
+            "name": "基础 - 只有右臂,无货架",
+            "scene": "assets/models/scene_no_shelf.xml",
+            "steps": 500000,
+            "reward_threshold": -200,
+            "success_consecutive": 3
+        },
+        "2": {
+            "name": "初级 - 2层货架",
+            "scene": "assets/models/scene_2_layers.xml",
+            "steps": 500000,
+            "reward_threshold": -150,
+            "success_consecutive": 3
+        },
+        "3": {
+            "name": "中级 - 4层货架",
+            "scene": "assets/models/scene.xml",
+            "steps": 500000,
+            "reward_threshold": -100,
+            "success_consecutive": 3
+        },
+        "4": {
+            "name": "高级 - 6层货架",
+            "scene": "assets/models/scene_6_layers.xml",
+            "steps": 500000,
+            "reward_threshold": -50,
+            "success_consecutive": 3
+        },
+        "5": {
+            "name": "完整 - 升降杆+右臂",
+            "scene": "assets/models/scene.xml",
+            "steps": 1000000,
+            "reward_threshold": 0,
+            "success_consecutive": 3
+        }
+    },
+    "training": {
+        "n_steps": 512,
+        "batch_size": 64,
+        "learning_rate": 0.0003,
+        "n_epochs": 10,
+        "gamma": 0.99,
+        "eval_freq": 10000,
+        "checkpoint_freq": 10000
+    },
+    "reward": {
+        "distance_weight": 10.0,
+        "approach_dist_1": 0.10,
+        "approach_reward_1": 5.0,
+        "approach_dist_2": 0.05,
+        "approach_reward_2": 15.0,
+        "approach_dist_3": 0.02,
+        "approach_reward_3": 50.0,
+        "approach_dist_4": 0.01,
+        "approach_reward_4": 100.0,
+        "success_reward": 500.0,
+        "obstacle_dist": 0.05,
+        "obstacle_penalty": 10.0,
+        "collision_penalty": 150.0
+    }
+}

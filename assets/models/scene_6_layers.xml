@@ -24,13 +24,30 @@
     <!-- 摄像头设置：对着机器人和货架 -->
     <camera name="fixed" pos="1.5 -1.0 1.5" xyaxes="0 1 0 -1 0 1" mode="fixed"/>
 
-<!-- 目标点 - 只有可视化属性，无物理属性 -->
-<body name="target_point" pos="1.375 -1.66 0.726">
-    <!-- 可视化盒子，无物理属性 -->
-    <geom name="target_visual" type="box" size="0.06 0.01 0.035" rgba="0.2 0.8 0.2 0.5" contype="0" conaffinity="0"/>
-    <site name="box_front_center" pos="0 -0.01 0" size="0.005" rgba="1 1 0 1"/>
-    <site name="upper_limit" pos="0 0 0.21" size="0.01" rgba="0 0 1 0.2"/>
-    <site name="lower_limit" pos="0 0 -0.035" size="0.01" rgba="0 0 1 0.2"/>
+<body name="pill_box" pos="1.375 -1.66 0.726">
+    <!-- 药盒保持freejoint，但在reset时固定位置 -->
+    <freejoint name="box_root"/>
+    
+    <geom name="box_geom" 
+          type="box" 
+          size="0.06 0.01 0.035" 
+          mass="0.2" 
+          rgba="0.2 0.8 0.2 1"/>
+          
+    <site name="box_front_center" 
+          pos="0 -0.01 0" 
+          size="0.005" 
+          rgba="1 1 0 1"/>
+
+    <site name="upper_limit" 
+          pos="0 0 0.21" 
+          size="0.01" 
+          rgba="0 0 1 0.2"/> 
+
+    <site name="lower_limit" 
+          pos="0 0 -0.035" 
+          size="0.01" 
+          rgba="0 0 1 0.2"/>
 </body>
   
 

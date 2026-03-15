@@ -1,0 +1,25 @@
+<mujoco model="MediPick_Scene_NoShelf">
+  <!-- 课程1: 无货架场景 - 只有地面和机器人 -->
+  <option gravity="0 0 -9.81" timestep="0.002" cone="elliptic" impratio="10"/>
+  <include file="simple3/urdf/simple3_test2_include.xml"/>
+  <visual>
+  <headlight ambient="0.5 0.5 0.5" diffuse="0.5 0.5 0.5" specular="0 0 0"/>
+  </visual>
+  <worldbody>
+    <geom name="floor" type="plane" pos="0 0 0" size="5 5 0.01" rgba="0.4 0.4 0.4 1"/>
+    <site name="entry_plane" 
+      type="box" 
+      size="0.44 0.001 0.5" 
+      pos="1.375 -1.85 0.6" 
+      rgba="1 0 0 0.3" />
+    <camera name="fixed" pos="1.5 -1.0 1.5" xyaxes="0 1 0 -1 0 1" mode="fixed"/>
+    <!-- 目标点 - 只有可视化属性，无物理属性 -->
+    <body name="target_point" pos="1.375 -1.66 0.6">
+        <!-- 可视化盒子，无物理属性 -->
+        <geom name="target_visual" type="box" size="0.06 0.01 0.035" rgba="0.2 0.8 0.2 0.5" contype="0" conaffinity="0"/>
+        <site name="box_front_center" pos="0 -0.01 0" size="0.005" rgba="1 1 0 1"/>
+        <site name="upper_limit" pos="0 0 0.21" size="0.01" rgba="0 0 1 0.2"/>
+        <site name="lower_limit" pos="0 0 -0.035" size="0.01" rgba="0 0 1 0.2"/>
+    </body>
+  </worldbody>
+</mujoco>
